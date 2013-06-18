@@ -1,7 +1,8 @@
 ## =============================================================================
-## List of Refernces
+## Refernces
 ## =============================================================================
 
+## Blog post - 
 ## The API - http://data.police.uk/api/docs/
 ## Google Map Icon - http://mapicons.nicolasmollet.com/ 
 
@@ -159,9 +160,9 @@ visualise.data <- function(data.df,  ## data frame from the "get.data" function
     
     ## Configure the scale and panel
     scale_fill_gradient(low = "yellow", high = "red") +
-    scale_alpha(range = c(.15, .45), guide = FALSE) +  ## Change and experiment differnet values
-    guides(fill = guide_colorbar(barwidth = 1.5, barheight = 10)) +
-    guides(size = guide_legend(override.aes = list(size = 8))) +
+    scale_alpha(range = c(.25, .75), guide = FALSE) +  ## Change and experiment differnet values
+    # guides(fill = guide_colorbar(barwidth = 1.5, barheight = 10)) +  ## disabled for now
+    # guides(size = guide_legend(override.aes = list(size = 8))) +  ## disabled for now
     
     ## Title and labels    
     labs(x = "Longitude", y = "Latitude") +
@@ -177,8 +178,9 @@ visualise.data <- function(data.df,  ## data frame from the "get.data" function
       axis.text.y = element_text(size = 14),
       axis.title.x = element_text(size = 16),
       axis.title.y = element_text(size = 16),
-      legend.title = element_text(size = 14, face = 'bold'),
-      legend.text = element_text(size = 12),
+      legend.position="none",
+      # legend.title = element_text(size = 14, face = 'bold'), ## disabled for now
+      # legend.text = element_text(size = 12), ## disabled for now
       strip.background = element_rect(fill = 'grey80'),
       strip.text.x = element_text(size = 12)
     ) +
@@ -223,14 +225,15 @@ visualise.data <- function(data.df,  ## data frame from the "get.data" function
 
 
 ## A Wrapper to download and visualise street level crime data
-crimeplot.wrapper <- function(point.of.interest = "London Eye",
-                              period = c("2013-01","2013-02","2013-03"),
-                              type.map = "roadmap",
-                              type.facet = NA,
-                              type.print = NA,
-                              output.plot = TRUE,
-                              output.filename = NULL,
-                              output.size = c(700,700)) 
+crimeplot.wrapper <- function(
+  point.of.interest = "London Eye",  ## user-defined location
+  period = c("2013-01","2013-02"),  ## period of time in YYYY-MM
+  type.map = "roadmap",  ## roadmap, terrain, satellite or hybrid
+  type.facet = NA,  ## options: NA, month, category or type
+  type.print = NA,  ## options: NA, panel or window
+  output.plot = TRUE,  ## print it to a png file?
+  output.filename = "temp.png",  ## provide a filename
+  output.size = c(700,700)) ## width and height setting                              
   {
   ## Get data
   data.df <- get.data(point.of.interest, period)
@@ -262,14 +265,66 @@ crimeplot.wrapper <- function(point.of.interest = "London Eye",
 
 ## =============================================================================
 ## Example 1 - Visualise all crimes within a one-mile radius of London Eye
-##             from Jan-2012 to Mar-2012
+##             from Jan-2013 to Apr-2013
 ## =============================================================================
 
 ## Define the period
-ex1.period <- format(seq(as.Date("2012-01-01"), length=1, by="months"), "%Y-%m")
+ex1.period <- format(seq(as.Date("2013-01-01"), length=4, by="months"), "%Y-%m")
 
+## Use the wrapper
 ex1.plot <- crimeplot.wrapper(point.of.interest = "London Eye",
                               period = ex1.period,
                               type.map = "roadmap",
-                              output.filename = "ex1.png") 
-                  
+                              output.filename = "ex1.png",
+                              output.size = c(700,700))
+                              
+
+## =============================================================================
+## Example 2 - As example 1 but with a facet "type" (e.g. Force or British
+##             Transport Police)
+## =============================================================================
+
+## Define the period
+ex2.period <- format(seq(as.Date("2013-01-01"), length=4, by="months"), "%Y-%m")
+
+## Use the wrapper
+ex2.plot <- crimeplot.wrapper(point.of.interest = "London Eye",
+                              period = ex2.period,
+                              type.map = "roadmap",
+                              type.facet = "type",
+                              output.filename = "ex2.png",
+                              output.size = c(1400,700))
+
+## =============================================================================
+## Example 3 - Monthly crimes in Manchester from Jan-2012 to Dec-2012 on a
+##             satellite map
+## =============================================================================
+
+## Define the period
+ex3.period <- format(seq(as.Date("2012-01-01"), length=12, by="months"), "%Y-%m")
+
+
+## Use the wrapper
+ex3.plot <- crimeplot.wrapper(point.of.interest = "Manchester",
+                              period = ex3.period,
+                              type.map = "satellite",
+                              type.facet = "month",
+                              output.filename = "ex3.png",
+                              output.size = c(1400,1400))
+
+## =============================================================================
+## Example 4 - Crimes by categories in Liverpool from Jan-2013 to Apr-2013 on a
+##             hybrid map
+## =============================================================================
+
+## Define the period
+ex4.period <- format(seq(as.Date("2013-01-01"), length=4, by="months"), "%Y-%m")
+
+## Use the wrapper
+ex4.plot <- crimeplot.wrapper(point.of.interest = "Liverpool",
+                              period = ex4.period,
+                              type.map = "hybrid",
+                              type.facet = "category",
+                              output.filename = "ex4.png",
+                              output.size = c(1400,1400))
+
