@@ -11,7 +11,7 @@
 ## =============================================================================
 
 ## Set Working Directory (optional)
-## setwd("E:/Cloud_Services/Google Drive/Repo/blenditbayes/2013-06-street-level-crime")
+setwd("E:/Cloud_Services/Google Drive/Repo/blenditbayes/2013-06-street-level-crime")
 
 ## Load the following packages
 library(ggplot2)
@@ -62,7 +62,7 @@ get.data <- function(point.of.interest = "London Eye", ## Define a location
   dir.create(file.path("data"), showWarnings = FALSE)
   
   ## Display a message
-  cat("Downloading data from Police API (see http://data.police.uk/api/docs/) ...\n")
+  cat("Downloading data from UK Police API ...\n")
 
   ## Create an empty data frame
   data.df <- c()  
@@ -101,6 +101,7 @@ get.data <- function(point.of.interest = "London Eye", ## Define a location
 ## A function to visualise the data
 visualise.data <- function(data.df,  ## data frame from the "get.data" function
                            point.of.interest = "London Eye",
+                           period = c("2013-01","2013-02","2013-03"),
                            type.map = "roadmap", ## "Or terrain, satellite, hybrid
                            type.facet = NA, ## month, category, type
                            type.print = "panel", ## panel, window or NA
@@ -171,15 +172,15 @@ visualise.data <- function(data.df,  ## data frame from the "get.data" function
     ## Other theme settings
     theme_bw() +
     theme(
-      title = element_text(size = 20, face = 'bold'),
-      axis.text.x = element_text(size = 16),
-      axis.text.y = element_text(size = 16),
-      axis.title.x = element_text(size = 18),
-      axis.title.y = element_text(size = 18),
-      legend.title = element_text(size = 16, face = 'bold'),
-      legend.text = element_text(size = 14),
+      title = element_text(size = 16, face = 'bold'),
+      axis.text.x = element_text(size = 14),
+      axis.text.y = element_text(size = 14),
+      axis.title.x = element_text(size = 16),
+      axis.title.y = element_text(size = 16),
+      legend.title = element_text(size = 14, face = 'bold'),
+      legend.text = element_text(size = 12),
       strip.background = element_rect(fill = 'grey80'),
-      strip.text.x = element_text(size = 14)
+      strip.text.x = element_text(size = 12)
     ) +
     
     ## Add star marker in center
@@ -222,23 +223,41 @@ visualise.data <- function(data.df,  ## data frame from the "get.data" function
 
 
 ## A Wrapper to download and visualise street level crime data
-wrapper <- function(point.of.interest = "London Eye",
-                    period = c("2013-01","2013-02","2013-03"),
-                    type.map = "roadmap",
-                    type.facet = NA,
-                    type.print = "panel",
-                    output.plot = TRUE) 
+crimeplot.wrapper <- function(point.of.interest = "London Eye",
+                              period = c("2013-01","2013-02","2013-03"),
+                              type.map = "roadmap",
+                              type.facet = NA,
+                              type.print = NA,
+                              output.plot = TRUE,
+                              output.filename = NULL,
+                              output.size = c(700,700)) 
   {
-  
-  ## Use get.data
+  ## Get data
   data.df <- get.data(point.of.interest, period)
   
-  ## Create a ggmap plot
-  visualise.data(data.df, point.of.interest, 
-                 type.map, type.facet, type.print, output.plot)
+  ## Visualise data
+  final.plot <- visualise.data(data.df,  ## From previous step
+                               point.of.interest,
+                               period,
+                               type.map,
+                               type.facet,
+                               type.print,
+                               output.plot)
+  
+  ## Print it out to a png file
+  if (output.plot) {
+    dir.create(file.path("output"), showWarnings = FALSE)
+    png(file=paste0("./output/",output.filename), 
+        width = output.size[1], height = output.size[2], 
+        units="px", type="cairo")
+    print(final.plot)
+    dev.off()
+  }
+  
+  ## Return the ggplot object
+  if (output.plot) {return(final.plot)}
   
 }
-
 
 
 ## =============================================================================
@@ -247,12 +266,10 @@ wrapper <- function(point.of.interest = "London Eye",
 ## =============================================================================
 
 ## Define the period
-ex1.period <- format(seq(as.Date("2012-01-01"), length=3, by="months"), "%Y-%m")
+ex1.period <- format(seq(as.Date("2012-01-01"), length=1, by="months"), "%Y-%m")
 
-## Use the wrapper
-wrapper(point.of.interest = "London Eye", 
-        period = ex1.period,
-        type.map = "roadmap",
-        type.facet = NA,
-        type.print = "panel",
-        output.plot = FALSE)
+ex1.plot <- crimeplot.wrapper(point.of.interest = "London Eye",
+                              period = ex1.period,
+                              type.map = "roadmap",
+                              output.filename = "ex1.png") 
+                  
