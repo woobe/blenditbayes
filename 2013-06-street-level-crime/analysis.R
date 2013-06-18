@@ -2,7 +2,7 @@
 ## Refernces
 ## =============================================================================
 
-## Blog post - 
+## Blog post - http://blenditbayes.blogspot.co.uk/2013/06/visualising-crime-hotspots-in-england.html
 ## The API - http://data.police.uk/api/docs/
 ## Google Map Icon - http://mapicons.nicolasmollet.com/ 
 
