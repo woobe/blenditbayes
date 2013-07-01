@@ -2,7 +2,7 @@
 ## Refernces
 ## =============================================================================
 
-## Blog post - http://blenditbayes.blogspot.co.uk/2013/06/visualising-crime-hotspots-in-england.html
+## Blog post - http://blenditbayes.blogspot.co.uk/2013/06/visualising-crime-hotspots-in-england_25.html
 ## The API - http://data.police.uk/api/docs/
 ## Google Map Icon - http://mapicons.nicolasmollet.com/ 
 
@@ -11,8 +11,8 @@
 ## Initiliase
 ## =============================================================================
 
-## Set Working Directory (optional)
-setwd("E:/Cloud_Services/Google Drive/Repo/blenditbayes/2013-06-street-level-crime")
+## Set Working Directory (optional - uncomment the following line)
+## setwd("CHANGE THIS TO YOUR WORKING DIRECTORY")
 
 ## Load the following packages
 library(ggplot2)
@@ -168,7 +168,7 @@ visualise.data <- function(data.df,  ## data frame from the "get.data" function
     labs(x = "Longitude", y = "Latitude") +
     ggtitle(paste("Crimes around ",point.of.interest, 
                   " from ", period[1],
-                  " to ", period[length(period)])) +
+                  " to ", period[length(period)], sep="")) +
     
     ## Other theme settings
     theme_bw() +
@@ -327,4 +327,3 @@ ex4.plot <- crimeplot.wrapper(point.of.interest = "Liverpool",
                               type.facet = "category",
                               output.filename = "ex4.png",
                               output.size = c(1400,1400))
-
