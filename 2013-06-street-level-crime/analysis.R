@@ -13,6 +13,8 @@
 
 ## Set Working Directory (optional - uncomment the following line)
 ## setwd("CHANGE THIS TO YOUR WORKING DIRECTORY")
+## setwd("/media/SUPPORT/Repo/blenditbayes/2013-06-street-level-crime")
+
 
 ## Load the following packages
 library(ggplot2)
