@@ -21,8 +21,8 @@ for (n.row in 1:nrow(compare.timing)) {
   
   temp.percent.diff <- (compare.timing[n.row,3]-compare.timing[n.row,4])/compare.timing[n.row,3]
   
-  if (abs(temp.percent.diff) <= 0.025) {
-    diff[n.row, 1] <- "<= 2.5%"
+  if (abs(temp.percent.diff) <= 0.05) {
+    diff[n.row, 1] <- "<= 5%"
   } else { 
     if (compare.timing[n.row,3] > compare.timing[n.row,4]) {
       diff[n.row, 1] <- paste(round(compare.timing[n.row,3] / compare.timing[n.row,4], digits=1), "x faster", sep="")
