@@ -1,0 +1,68 @@
+%  Creating a Quick Report with knitr, xtable, R Markdown, Pandoc (and some OpenBLAS Benchmark Results)
+
+# Introduction
+
+I was looking for ways to create professional-looking documents with R codes. After some experiments with [Sweave](http://www.stat.uni-muenchen.de/~leisch/Sweave/), I repeatedly reinforced my uncomfortable feeling with LaTeX. Luckily, the availability of [knitr](http://yihui.name/knitr/), [xtable](http://cran.r-project.org/web/packages/xtable/index.html) and [Pandoc](http://johnmacfarlane.net/pandoc/) has made things easier for me. I would say this is a solution that gives satisfactory results with minimal effort.
+
+While I was researching on this subject, I also noticed that a [new version of OpenBLAS](http://www.r-bloggers.com/multi-threaded-openblas-backported-to-recent-ubuntu-releases/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+RBloggers+%28R+bloggers%29) had been made available (as always, thanks to Tal's [R-bloggers](http://www.r-bloggers.com/)!). I thought a simple performance comparison between my current version of OpenBLAS (v0.2.6-1) and the new one (v0.2.8-1) would be interesting. A blog post about code-generated report **with** the OpenBLAS benchmark results would be even better! So here we go.
+
+As this post is more about generating report with codes, I am not going into the details of the OpenBLAS installation and the benchmarking process. For more information, see [this](http://www.stat.cmu.edu/~nmv/2013/07/09/for-faster-r-use-openblas-instead-better-than-atlas-trivial-to-switch-to-on-ubuntu/), and [this](http://r.research.att.com/benchmarks/).
+
+# Brief Overview of Workflow
+
+I would say the documentation process involves three major steps:
+
+1. Write R scripts to carry out the analysis and to summarise the results.
+2. Create a R Markdown file (.Rmd) to document the results.
+3. Write another R script to convert R Markdown (.Rmd) into Markdown (.md) and eventually a LaTeX-PDF using Pandoc.
+
+The codes I used to produce this report are available on **[Github](https://github.com/woobe/blenditbayes/tree/master/2013-08-easy-documentation).**
+
+# Comparing R-25 Benchmark Results
+
+The R-25 benchmark consists of 15 tests. Originally, they are split into 3 groups (matrix calculation, matrix functions and programmation) with trimmed means for each group. For this comparison, I decided to take the overall mean. The benchmark results (in seconds) from each OpenBLAS test are summarised in the tables below.
+
+Some basic specs of my machine: Intel i7-2630QM (8 cores), 8GB RAM, [Linux Mint 15 Cinnamon](http://www.linuxmint.com/edition.php?id=132) and R 3.0.1 x64.
+
+```{r echo=FALSE, message=FALSE, results='asis', prompt=FALSE, dpi=600}
+setwd("/media/woobe/SUPPORT/Repo/blenditbayes/2013-08-easy-documentation")
+source("compare.R")
+library(xtable)
+print(xtable(compare.timing[1:15,], caption="R-25 Benchmark Results", digits=3), 
+      comment = FALSE,
+      include.rownames = FALSE)
+
+print(xtable(compare.timing[-1:-15,], caption="R-25 Benchmark Comparison Summary", digits=3), 
+      comment = FALSE,
+      include.rownames = FALSE)
+```
+
+According to these preliminary results, the latest version of OpenBLAS is slightly faster than the previous version installed on my machine for most of the tasks. Yet, for the tests "Eigenvalues of a 640x640 random matrix" and "Escoufier's method on a 45x45 matrix (mixed)", there is a disappointing drop in performance. I would guess it is due to the overhead involved (from 2 cores in version 0.2.6-1 to the maximum 8 cores in version 0.2.8-1) but more robust tests are needed to verify this. For now, I am happy to stay with the 0.2.8-1 version.
+
+# ggplot2
+
+How could I finish my report without some [ggplot2](http://ggplot2.org/) magic? Here is a simple plot to visualise the benchmark results comparison:
+
+```{r echo=FALSE, message=FALSE, results='asis', prompt=FALSE, dpi=600, fig.width=8, fig.height=5, fig.cap="Benchmark Results Comparison"}
+new.compare.timing <- data.frame(rbind(compare.timing[,1:2], compare.timing[,1:2]),
+                                 Version = rep(c("v0.2.6-1","v0.2.8-1"), each=17),
+                                 Result = c(compare.timing[,3], compare.timing[,4]))
+                                 
+ggplot(data = new.compare.timing[-c(16,17,33,34),], aes(Test, Result, colour = Version)) + 
+  geom_point(size=2.5, alpha=0.75) + 
+  scale_colour_manual(values = c("#C11B17", "#15317E")) +    
+  facet_wrap(~ Group) + 
+  theme_bw() + 
+  theme(axis.text.x = element_blank()) +
+  xlab("Tests in each group") +
+  ylab("Benchmark results: duration (seconds)") 
+
+```
+
+# Acknowledgement
+
+A **big thank you** to the people who developed the tools and made them available to the community: [The RStudio Team](http://www.rstudio.com/about/) (RStudio IDE and R Markdown), [Yihui Xie](http://yihui.name/) (knitr), [David Dahl & Charles Roosen](http://cran.r-project.org/web/packages/xtable/index.html) (xtable) and [John MacFarlane](http://johnmacfarlane.net/pandoc/) (Pandoc).
+
+# Conclusion
+
+I hope this very basic example will get you interested in code-generated documents (with very limited experience of LaTeX like myself). I only wish I had learned about all these open-source tools a lot earlier (well, like 3 years earlier when I first started my EngD project ...)
