@@ -1,6 +1,6 @@
 ## Convert Rmd into pdf
 
-## Set working diectory (Change this yourself)
+## Set working diectory (Change this yourself!!)
 ## setwd("/media/woobe/SUPPORT/Repo/blenditbayes/2013-08-easy-documentation")
 
 ## Define filename
