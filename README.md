@@ -17,3 +17,9 @@ Codes used in my blog "Blend it like a Bayesian!" (http://blenditbayes.blogspot.
 "2013-08-easy-documentation"
 
 ![Pic2](http://woobe.bitbucket.org/images/blenditbayes/2013-08-easy-documentation/output_pdf.png)
+
+## Nov 2013
+
+[ShinyApp: CrimeMap] (http://blenditbayes.shinyapps.io/crimemap/)
+
+Prototype deployed - watch this space! 
