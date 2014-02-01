@@ -1,0 +1,22 @@
+% Quantifying Green Values of Drainage Systems
+
+```{r, Initial Comments, echo=FALSE, message=FALSE, results='hide'}
+## =============================================================================
+## Code-generated Report
+## Step 2: Documentation in R Markdown Format
+## Use % in the first line for the title
+## =============================================================================
+```
+
+```{r, Source Step 1, echo=FALSE, message=FALSE, results='hide'}
+## Source Codes from Step 1
+source("step1_codes.R")
+```
+
+# Chapter 1
+
+Blah Blah Bla
+
+```{r, figure1, fig.width=10, fig.height=5, echo=FALSE, message=FALSE, dpi=100}
+print(plot1)
+```
