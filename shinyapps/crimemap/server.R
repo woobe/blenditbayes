@@ -6,27 +6,17 @@ library(png)
 library(grid)
 library(RCurl)
 library(plyr)
+library(markdown)
+library(rCharts)
+library(parallel)
 
 ## Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output) {
   
+  
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ## Reactive Functions
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  
-  ## Mini Function
-  mini.unlist <- function(temp.data) {
-    temp.data <- unlist(temp.data)
-    output <- data.frame(
-      category = temp.data[1],
-      #streetid = temp.data[4],
-      streetname = temp.data[7],
-      latitude = as.numeric(temp.data[5]),
-      longitude = as.numeric(temp.data[8]),
-      month = temp.data[10],
-      type = temp.data[11])
-    return(output)
-  }
   
   ## Get Geocode
   map.geocode <- reactive({
@@ -41,22 +31,44 @@ shinyServer(function(input, output) {
   ## Create Data Framework
   create.df <- reactive({
     
+    ## Use Multicore if available
+    num_core <- parallel::detectCores()
+    if (num_core > 1) {
+      registerDoSNOW(makeCluster(max(c(2, (num_core - 1))), type="SOCK"))
+    }
+    
+    ## Mini function 1
+    mini.unlist <- function(temp.data) {
+      temp.data <- unlist(temp.data)
+      output <- data.frame(
+        category = temp.data[1],
+        streetid = temp.data[4],
+        streetname = temp.data[7],
+        latitude = as.numeric(temp.data[5]),
+        longitude = as.numeric(temp.data[8]),
+        month = temp.data[10],
+        type = temp.data[11])
+      return(output)
+    }
+    
+    ## Mini function 2
+    mini.getdata <- function(temp.period, temp.geocode, n.period) {
+      df <- ldply(.data = fromJSON(getURL(paste0("http://data.police.uk/api/crimes-street/all-crime?lat=",
+                                                 temp.geocode[2], "&lng=", temp.geocode[1],
+                                                 "&date=", temp.period[n.period]))), .fun = mini.unlist)
+      return(df)
+    }
+    
     ## Use Reactive Functions
     temp.geocode <- map.geocode()
     temp.period <- map.period()
     
-    ## Get Data
-    for (item in temp.period) { 
-      if (item == temp.period[1]) {
-        df <- ldply(.data = fromJSON(getURL(paste0("http://data.police.uk/api/crimes-street/all-crime?lat=",
-                                                   temp.geocode[2], "&lng=", temp.geocode[1],
-                                                   "&date=", item))), .fun = mini.unlist)
-      } else {
-        df <- rbind(df, ldply(.data = fromJSON(getURL(paste0("http://data.police.uk/api/crimes-street/all-crime?lat=",
-                                                             temp.geocode[2], "&lng=", temp.geocode[1],
-                                                             "&date=", item))), .fun = mini.unlist))
-      }
-    }    
+    ## Download data and reformat (in parallel mode if num_core >= 2)
+    df <- foreach(p.period = 1:length(temp.period),
+                  .combine = rbind,
+                  .multicombine = TRUE,
+                  .packages = c("ggmap", "RJSONIO", "plyr", "RCurl")) %dopar%
+      mini.getdata(temp.period, temp.geocode, n.period = p.period)
     
     ## Output
     df
@@ -68,25 +80,47 @@ shinyServer(function(input, output) {
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$datatable <- renderDataTable({
-    create.df()
-  }, options = list(aLengthMenu = c(5, 10, 25, 50, 100, 500), iDisplayLength = 10))
+    
+    if (input$poi == "Demo (London)") {
+      load("./demo/demo_london_eye.rda")
+    } else {
+      df <- create.df()
+    }
+    
+    df
+    
+  }, options = list(aLengthMenu = c(10, 25, 50, 100, 1000), iDisplayLength = 10))
   
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ## Output 2 - Weather Map
+  ## Output 2 - Heat Map
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$map <- renderPlot({
     
-    ## Use Reactive Functions
-    temp.geocode <- map.geocode()
-    temp.period <- map.period()
+    if (input$poi == "Demo (London)") {
+      
+      ## Use pre-loaded demo data
+      load("./demo/demo_london_eye.rda")
+      
+      ## Create a data frame for the map center (point of interest)
+      center.df <- data.frame(temp.geocode, location = "London")
+      colnames(center.df) <- c("lon","lat","location")
+      
+      
+    } else {
+      
+      ## Use Reactive Functions
+      temp.geocode <- map.geocode()
+      temp.period <- map.period()
+      
+      ## Get df
+      df <- create.df()
+      
+      ## Create a data frame for the map center (point of interest)
+      center.df <- data.frame(temp.geocode, location = input$poi)
+      colnames(center.df) <- c("lon","lat","location")
+    }
     
-    ## Get df
-    df <- create.df()
-    
-    ## Create a data frame for the map center (point of interest)
-    center.df <- data.frame(temp.geocode, location = input$poi)
-    colnames(center.df) <- c("lon","lat","location")
     
     ## Download base map using {ggmap}
     ## Note that a PNG file "ggmapTemp.png" will be created
@@ -100,7 +134,7 @@ shinyServer(function(input, output) {
     map.base <- get_googlemap(
       as.matrix(temp.geocode),
       maptype = input$type, ## Map type as defined above (roadmap, terrain, satellite, hybrid)
-      langauage = "en-EN",  ## Code Ref: http://msdn.microsoft.com/en-us/library/ms533052(v=vs.85).aspx
+      language = "en-EN",  ## Code Ref: http://msdn.microsoft.com/en-us/library/ms533052(v=vs.85).aspx
       zoom = input$zoom,            ## 14 is just about right for a 1-mile radius
       color = temp.color,   ## "color" or "bw" (black & white)
       scale = temp.scale,   ## Set it to 2 for high resolution output
@@ -131,7 +165,7 @@ shinyServer(function(input, output) {
       
       ## Title and labels    
       labs(x = "Longitude", y = "Latitude") +
-      ggtitle(paste("Crimes around ", input$poi, 
+      ggtitle(paste("Crimes around ", center.df$location, 
                     " from ", temp.period[1],
                     " to ", temp.period[length(temp.period)], sep="")) +
       
@@ -175,17 +209,34 @@ shinyServer(function(input, output) {
   }, width = 1280, height = 1280)
   
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ## Output 3 - Other Plots
+  ## Output 3 - Trends 1
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
   output$trends1 <- renderPlot({
     
-    ## Use Reactive Functions
-    temp.geocode <- map.geocode()
-    temp.period <- map.period()
-    
-    ## Get df
-    df <- create.df()
+    if (input$poi == "Demo (London)") {
+      
+      ## Use pre-loaded demo data
+      load("./demo/demo_london_eye.rda")
+      
+      ## Create a data frame for the map center (point of interest)
+      center.df <- data.frame(temp.geocode, location = "London")
+      colnames(center.df) <- c("lon","lat","location")
+      
+      
+    } else {
+      
+      ## Use Reactive Functions
+      temp.geocode <- map.geocode()
+      temp.period <- map.period()
+      
+      ## Get df
+      df <- create.df()
+      
+      ## Create a data frame for the map center (point of interest)
+      center.df <- data.frame(temp.geocode, location = input$poi)
+      colnames(center.df) <- c("lon","lat","location")
+    }
     
     ## Small Summary df
     #df2 <- ddply(df, .(category, month), summarise, total = length(category))
@@ -194,7 +245,7 @@ shinyServer(function(input, output) {
     plot1 <- ggplot(df, aes(x = month, fill = category)) + 
       geom_bar(colour = "black") + facet_wrap(~ category) +
       labs(x = "Months", y = "Crime Records") + 
-      ggtitle(paste("Crimes around ", input$poi, 
+      ggtitle(paste("Crimes around ", center.df$location, 
                     ": Trends from ", temp.period[1],
                     " to ", temp.period[length(temp.period)], sep="")) +
       theme_bw() +
@@ -216,5 +267,60 @@ shinyServer(function(input, output) {
     print(plot1)
     
   }, width = 1280, height = 1280)
+  
+  ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ## Output x - rCharts
+  ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+  output$myChart <- renderChart({
+    
+    if (input$poi == "Demo (London)") {
+      
+      ## Use pre-loaded demo data
+      load("./demo/demo_london_eye.rda")
+      
+    } else {
+      
+      ## Use Reactive Functions
+      temp.geocode <- map.geocode()
+      temp.period <- map.period()
+      
+      ## Get df
+      df <- create.df()
+      
+    }
+    
+    ## nvd3
+    n1 <- nPlot( ~ category, group = 'month', data = df, type = 'multiBarHorizontalChart')
+    #n1 <- nPlot(~ cyl, group = 'gear', data = mtcars, type = 'multiBarHorizontalChart')
+    n1$chart(showControls = F)
+    
+    ## Needed for Shiny
+    n1$addParams(dom = 'myChart', width = 700, height = 1000)
+    # n1$addParams(width = 400, height = 400, dom = 'myChart', title = "rCharts Title here ...")
+    return(n1)
+    
+  })
+  
+
+  
+  ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ## Output 4 - news (HTML)
+  ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  
+  output$html <- renderText({
+        
+    "<!DOCTYPE html>
+      <html>
+      <body>
+      
+      <h1>My First Heading</h1>
+      
+      <p>My first paragraph.</p>
+      
+      </body>
+      </html>"
+    
+  })
 
 })
