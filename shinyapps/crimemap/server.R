@@ -7,8 +7,9 @@ library(grid)
 library(RCurl)
 library(plyr)
 library(markdown)
-library(rCharts)
-library(parallel)
+library(foreach)
+#library(parallel)
+# library("rCharts", lib.loc="/home/woobe/R/x86_64-pc-linux-gnu-library/3.0")
 
 ## Define server logic required to summarize and view the selected dataset
 shinyServer(function(input, output) {
@@ -31,11 +32,11 @@ shinyServer(function(input, output) {
   ## Create Data Framework
   create.df <- reactive({
     
-    ## Use Multicore if available
-    num_core <- parallel::detectCores()
-    if (num_core > 1) {
-      registerDoSNOW(makeCluster(max(c(2, (num_core - 1))), type="SOCK"))
-    }
+    ## Use Multicore if available (disabled for now)
+    # num_core <- parallel::detectCores()
+    # if (num_core > 1) {
+    #   registerDoSNOW(makeCluster(max(c(2, (num_core - 1))), type="SOCK"))
+    # }
     
     ## Mini function 1
     mini.unlist <- function(temp.data) {
@@ -134,10 +135,13 @@ shinyServer(function(input, output) {
     map.base <- get_googlemap(
       as.matrix(temp.geocode),
       maptype = input$type, ## Map type as defined above (roadmap, terrain, satellite, hybrid)
-      language = "en-EN",  ## Code Ref: http://msdn.microsoft.com/en-us/library/ms533052(v=vs.85).aspx
+      markers = temp.geocode,
       zoom = input$zoom,            ## 14 is just about right for a 1-mile radius
       color = temp.color,   ## "color" or "bw" (black & white)
       scale = temp.scale,   ## Set it to 2 for high resolution output
+      # other settings that are not used at the moment
+      # language = "en-EN" Ref: https://spreadsheets.google.com/spreadsheet/pub?key=0Ah0xU81penP1cDlwZHdzYWkyaERNc0xrWHNvTTA1S1E&gid=1
+      # style              Ref: https://developers.google.com/maps/documentation/staticmaps/#StyledMapElements
     )
     
     ## Convert the base map into a ggplot object
@@ -272,55 +276,36 @@ shinyServer(function(input, output) {
   ## Output x - rCharts
   ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
-  output$myChart <- renderChart({
-    
-    if (input$poi == "Demo (London)") {
-      
-      ## Use pre-loaded demo data
-      load("./demo/demo_london_eye.rda")
-      
-    } else {
-      
-      ## Use Reactive Functions
-      temp.geocode <- map.geocode()
-      temp.period <- map.period()
-      
-      ## Get df
-      df <- create.df()
-      
-    }
-    
-    ## nvd3
-    n1 <- nPlot( ~ category, group = 'month', data = df, type = 'multiBarHorizontalChart')
-    #n1 <- nPlot(~ cyl, group = 'gear', data = mtcars, type = 'multiBarHorizontalChart')
-    n1$chart(showControls = F)
-    
-    ## Needed for Shiny
-    n1$addParams(dom = 'myChart', width = 700, height = 1000)
-    # n1$addParams(width = 400, height = 400, dom = 'myChart', title = "rCharts Title here ...")
-    return(n1)
-    
-  })
-  
+#   output$myChart <- renderChart({
+#     
+#     if (input$poi == "Demo (London)") {
+#       
+#       ## Use pre-loaded demo data
+#       load("./demo/demo_london_eye.rda")
+#       
+#     } else {
+#       
+#       ## Use Reactive Functions
+#       temp.geocode <- map.geocode()
+#       temp.period <- map.period()
+#       
+#       ## Get df
+#       df <- create.df()
+#       
+#     }
+#     
+#     ## nvd3
+#     n1 <- nPlot( ~ category, group = 'month', data = df, type = 'multiBarHorizontalChart')
+#     #n1 <- nPlot(~ cyl, group = 'gear', data = mtcars, type = 'multiBarHorizontalChart')
+#     n1$chart(showControls = F)
+#     
+#     ## Needed for Shiny
+#     n1$addParams(dom = 'myChart', width = 700, height = 1000)
+#     # n1$addParams(width = 400, height = 400, dom = 'myChart', title = "rCharts Title here ...")
+#     return(n1)
+#     
+#   })
+#   
 
-  
-  ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ## Output 4 - news (HTML)
-  ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  
-  output$html <- renderText({
-        
-    "<!DOCTYPE html>
-      <html>
-      <body>
-      
-      <h1>My First Heading</h1>
-      
-      <p>My first paragraph.</p>
-      
-      </body>
-      </html>"
-    
-  })
 
 })

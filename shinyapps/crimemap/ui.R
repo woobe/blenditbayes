@@ -1,11 +1,3 @@
-library(shiny)
-# library(shinyIncubator)
-# library(ggplot2)
-# library(ggmap)
-library(rCharts)
-library(doSNOW)
-library(foreach)
-
 # Define UI for miles per gallon application
 shinyUI(pageWithSidebar(
   
@@ -41,6 +33,7 @@ shinyUI(pageWithSidebar(
     
     wellPanel(
       helpText(HTML("<b>MAP SETTINGS</b>")),
+      # selectInput("lang", "Display Langauge:", choice = c("en-GB","fr")),
       selectInput("facet", "Choose Facet Type:", choice = c("none","type", "month", "category")),
       selectInput("type", "Choose Google Map Type:", choice = c("roadmap", "satellite", "hybrid","terrain")),    
       checkboxInput("res", "High Resolution?", FALSE),
@@ -75,20 +68,22 @@ shinyUI(pageWithSidebar(
       helpText(HTML("<b>ABOUT ME</b>")),
       HTML('Jo-fai Chow'),
       HTML('<br>'),
-      HTML('Research Engineer | Data Geek | Background in Water'),
+      HTML('Research Engineer | Data Geek'),
       HTML('<br>'),
-      HTML('<a href="http://about.me/jofai_chow" target="_blank">About Me</a>, '),
-      HTML('<a href="http://blenditbayes.blogspot.co.uk" target="_blank">Blog</a>, '),
-      HTML('<a href="https://github.com/woobe" target="_blank">Github</a>, '),
-      HTML('<a href="http://uk.linkedin.com/in/jofaichow" target="_blank">LinkedIn</a>, '),
-      HTML('<a href="http://www.kaggle.com/users/28271/woobe" target="_blank">Kaggle</a>.')
+      HTML('Background in Water and Machine Learning'),
+      HTML('<br>'),
+      HTML('<a href="http://bit.ly/aboutme_jofaichow" target="_blank">About Me</a>, '),
+      HTML('<a href="http://bit.ly/blenditbayes" target="_blank">Blog</a>, '),
+      HTML('<a href="http://bit.ly/github_woobe" target="_blank">Github</a>, '),
+      HTML('<a href="http://bit.ly/linkedin_jofaichow" target="_blank">LinkedIn</a>, '),
+      HTML('<a href="http://bit.ly/kaggle_woobe" target="_blank">Kaggle</a>.')
     ),
     
     wellPanel(
       helpText(HTML("<b>VERSION CONTROL</b>")),
-      HTML('Version 0.1.2'),
+      HTML('Version 0.1.4'),
       HTML('<br>'),
-      HTML('Deployed on 04-Feb-2013')
+      HTML('Deployed on 19-Feb-2013')
     )
     
   ),
@@ -99,10 +94,14 @@ shinyUI(pageWithSidebar(
   
   mainPanel(
     tabsetPanel(
-      tabPanel("Introduction", includeMarkdown("docs/introduction.md")),
+
+      ## Experiment
       #tabPanel("LondonR Demo", includeMarkdown("docs/londonr.md")),
       #tabPanel("Sandbox (rCharts)", showOutput("myChart", "nvd3")),
       #tabPanel("Sandbox", includeMarkdown("docs/sandbox.md")),
+      
+      ## Core tabs
+      tabPanel("Introduction", includeMarkdown("docs/introduction.md")),
       tabPanel("Data", dataTableOutput("datatable")),
       tabPanel("Heat Map", plotOutput("map")),
       tabPanel("Trends", plotOutput("trends1")),
