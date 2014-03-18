@@ -15,6 +15,12 @@ Here are some articles related to this web app.
 
 5. <a href="http://www.bbc.co.uk/news/uk-politics-25831906" target="_blank">Crime stats: The truth is out there</a> (21-Jan-2014)
 
+## Other Related Articles
+
+1. <a href="http://mobile.theverge.com/2014/2/19/5419854/the-minority-report-this-computer-predicts-crime-but-is-it-racist" target="_blank">The minority report: Chicago's new police computer predicts crimes, but is it racist?</a> (19-Feb-2014)
+
+
+
 ## Related Blog Posts
 
 1. <a href="http://bit.ly/bib_crimemap1" target="_blank">Visualising Crime Hotspots in England and Wales using {ggmap}</a> (25-Jun-2013)

@@ -24,11 +24,11 @@ shinyUI(pageWithSidebar(
       helpText("Examples: Oxford, Wembley Stadium, M16 0RA etc."),
       
       dateInput("start", "First Month of Data Collection:", value = "2012-01-01", format = "yyyy-mm",
-                min = "2012-01-01", max = "2013-09-30"),
+                min = "2012-01-01", max = "2013-12-31"),
       
       sliderInput("months", "Length of Analysis (Months):", 
-                  min = 1, max = 12, step = 1, value = 3),
-      helpText("Note: data is available from Dec 2010 to Sep 2013. There is inconsistency in 2010-2011 records so I have omitted them for now. It takes longer to redner the plots when you increase this number.")      
+                  min = 1, max = 24, step = 1, value = 3),
+      helpText("Note: data is available from Dec 2010 to Dec 2013. There is inconsistency in 2010-2011 records so I have omitted them for now. It takes longer to redner the plots when you increase this number.")      
       ),
     
     wellPanel(
@@ -81,9 +81,9 @@ shinyUI(pageWithSidebar(
     
     wellPanel(
       helpText(HTML("<b>VERSION CONTROL</b>")),
-      HTML('Version 0.1.4'),
+      HTML('Version 0.1.5'),
       HTML('<br>'),
-      HTML('Deployed on 19-Feb-2013')
+      HTML('Deployed on 10-Mar-2014')
     )
     
   ),

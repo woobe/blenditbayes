@@ -21,7 +21,7 @@ shinyServer(function(input, output) {
   
   ## Get Geocode
   map.geocode <- reactive({
-    suppressMessages(data.frame(geocode = geocode(input$poi)))
+    suppressMessages(data.frame(geocode = geocode(paste(input$poi, "UK"))))
   })
   
   ## Define Period
@@ -169,7 +169,7 @@ shinyServer(function(input, output) {
       
       ## Title and labels    
       labs(x = "Longitude", y = "Latitude") +
-      ggtitle(paste("Crimes around ", center.df$location, 
+      ggtitle(paste("Crimes in/around ", center.df$location, 
                     " from ", temp.period[1],
                     " to ", temp.period[length(temp.period)], sep="")) +
       
@@ -249,7 +249,7 @@ shinyServer(function(input, output) {
     plot1 <- ggplot(df, aes(x = month, fill = category)) + 
       geom_bar(colour = "black") + facet_wrap(~ category) +
       labs(x = "Months", y = "Crime Records") + 
-      ggtitle(paste("Crimes around ", center.df$location, 
+      ggtitle(paste("Crimes in/around ", center.df$location, 
                     ": Trends from ", temp.period[1],
                     " to ", temp.period[length(temp.period)], sep="")) +
       theme_bw() +
