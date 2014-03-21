@@ -81,9 +81,9 @@ shinyUI(pageWithSidebar(
     
     wellPanel(
       helpText(HTML("<b>VERSION CONTROL</b>")),
-      HTML('Version 0.1.5'),
+      HTML('Version 0.1.6'),
       HTML('<br>'),
-      HTML('Deployed on 10-Mar-2014')
+      HTML('Deployed on 20-Mar-2014')
     )
     
   ),
@@ -96,6 +96,7 @@ shinyUI(pageWithSidebar(
     tabsetPanel(
 
       ## Experiment
+      #tabPanel("Interactive Crime Map (Test)", includeHTML("html/2014-01-All-iPhone.html")),
       #tabPanel("LondonR Demo", includeMarkdown("docs/londonr.md")),
       #tabPanel("Sandbox (rCharts)", showOutput("myChart", "nvd3")),
       #tabPanel("Sandbox", includeMarkdown("docs/sandbox.md")),

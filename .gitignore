@@ -1,5 +1,9 @@
 # History files
 .Rhistory
-
 # Example code in package build process
 *-Ex.R
+.Rproj.user
+blenditbayes.Rproj
+sandbox/
+shinyapps/crimemap_test.R
+shinyapps/error_log.txt
