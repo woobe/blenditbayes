@@ -2,6 +2,9 @@
 
 Codes used in my blog "Blend it like a Bayesian!" (http://blenditbayes.blogspot.co.uk/)
 
+### Note: 'CrimeMap' has been moved to [https://github.com/woobe/rApps](https://github.com/woobe/rApps). That will be the default repo for all my future R applications.
+
+
 ## Jun 2013
 
 [Visualising Crime Hotspots in England and Wales using {ggmap}] (http://blenditbayes.blogspot.co.uk/2013/06/visualising-crime-hotspots-in-england_25.html)
