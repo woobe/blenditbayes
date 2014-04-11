@@ -1,7 +1,9 @@
 Blend It Like a Bayesian!
 ==================
 
-Codes used in my blog "Blend it like a Bayesian!" (http://bit.ly/blenditbayes)
+## Introduction
+
+This is the repository for the code used in my blog "[Blend it like a Bayesian!](http://bit.ly/blenditbayes)". At the moment, most posts are related to R and data visualisation (mainly because this is the area I want to improve). In the future, I do plan to talk about other programming langauages (MATLAB, Python, Julia etc.) and topics (machine learning, big data and open science). The blog is currently hosted on Blogger which I don't have full control. I will eventually move it and better integrate it with my personal website ([www.jofaichow.co.uk](http://bit.ly/jofaichow)).
 
 --------------------------
 
@@ -23,7 +25,7 @@ Codes used in my blog "Blend it like a Bayesian!" (http://bit.ly/blenditbayes)
 
 --------------------------
 
-## Introducing CrimeMap - A Web App Powered by ShinyApps! ([11/2013](http://bit.ly/bib_crimemap_blog2)) ([Web App](http://bit.ly/bib_crimemap))
+## Introducing CrimeMap ([11/2013](http://bit.ly/bib_crimemap_blog2)) ([Web App](http://bit.ly/bib_crimemap))
 
 **NOTE**: 'CrimeMap' has been moved to [github.com/woobe/rApps](http://bit.ly/github_rApps). That is now the default repo for all my R applications.
 
@@ -50,3 +52,5 @@ Codes used in my blog "Blend it like a Bayesian!" (http://bit.ly/blenditbayes)
 </center>
 
 ---------------------------
+
+### Thanks for your attention :)
