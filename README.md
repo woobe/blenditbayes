@@ -10,7 +10,7 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 ## Visualising Crime Hotspots ([06/2013](http://bit.ly/bib_crimemap_blog1))
 
 <center>
-<img src="http://woobe.bitbucket.org/images/blenditbayes/2013-06-street-level-crime/ex1.png" width="850">
+<img src="http://woobe.bitbucket.org/images/blenditbayes/2013-06-street-level-crime/ex1.png" width="800">
 </center>
 
 
@@ -19,7 +19,7 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 ## Creating a Quick Report ([08/2013](http://blenditbayes.blogspot.co.uk/2013/08/creating-quick-report-with-knitr-xtable.html))
 
 <center>
-<img src="http://woobe.bitbucket.org/images/blenditbayes/2013-08-easy-documentation/output_pdf.png" width="850">
+<img src="http://woobe.bitbucket.org/images/blenditbayes/2013-08-easy-documentation/output_pdf.png" width="800">
 </center>
 
 
@@ -30,7 +30,7 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 **NOTE**: 'CrimeMap' has been moved to [github.com/woobe/rApps](http://bit.ly/github_rApps). That is now the default repo for all my R applications.
 
 <center>
-<img src="http://1.bp.blogspot.com/-RbXzkyPofVg/Upi2R6XQrBI/AAAAAAAAAYY/SJxe32SLzhQ/s1600/CrimeMap_BlogPost_001.jpg" width="850">
+<img src="http://1.bp.blogspot.com/-RbXzkyPofVg/Upi2R6XQrBI/AAAAAAAAAYY/SJxe32SLzhQ/s1600/CrimeMap_BlogPost_001.jpg" width="800">
 </center>
 
 
@@ -39,8 +39,8 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 ## The rBlocks Experiements [03/2014](http://blenditbayes.blogspot.co.uk/2014/03/the-rblocks-experiments.html)
 
 <center>
-<img src="http://i.imgur.com/Ic91789.gif" alt="rblocks1" width="425">
-<img src="http://i.imgur.com/NhvaICA.gif" alt="rblocks1" width="425">
+<img src="http://i.imgur.com/Ic91789.gif" alt="rblocks1" width="400">
+<img src="http://i.imgur.com/NhvaICA.gif" alt="rblocks1" width="400">
 </center>
 
 ---------------------------
@@ -48,7 +48,7 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 ## Interactive rCrimemap ([03/2014](http://blenditbayes.blogspot.co.uk/2014/03/updates-on-interactive-rcrimemap.html))
 
 <center>
-<img src="http://i.imgur.com/d12JYE8.gif" alt="rblocks1" width="850">
+<img src="http://i.imgur.com/d12JYE8.gif" alt="rblocks1" width="800">
 </center>
 
 ---------------------------
