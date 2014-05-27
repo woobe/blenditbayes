@@ -36,7 +36,7 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 
 ---------------------------
 
-## The rBlocks Experiements [03/2014](http://blenditbayes.blogspot.co.uk/2014/03/the-rblocks-experiments.html)
+## The rBlocks Experiements ([03/2014](http://blenditbayes.blogspot.co.uk/2014/03/the-rblocks-experiments.html))
 
 <center>
 <img src="http://i.imgur.com/Ic91789.gif" alt="rblocks1" width="350">
@@ -53,4 +53,8 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 
 ---------------------------
 
-### Thanks for your attention :)
+## Colour Palette Generator ([05/2014](http://blenditbayes.blogspot.co.uk/2014/05/towards-yet-another-r-colour-palette.html))
+
+<center>
+<img src="http://i.imgur.com/YwCy6lZ.png" alt="Tarantino" width="700">
+</center>
