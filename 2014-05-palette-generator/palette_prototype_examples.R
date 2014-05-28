@@ -63,7 +63,7 @@ png("example_tarantino.png", width = 1000, height = 1000, res = 150)
 par(mfrow = c(4,4))
 
 for (n_tar in 1:length(lst_tar)) {
-  tmp_url <- unlist(unlist(lst_tar[n_tar]))
+  tmp_url <- unlist(lst_tar[n_tar])
   if (n_tar %% 2 != 0) display(readImage(tmp_url), method = "raster")
   set.seed(1234)
   pie(rep(1, 3), col = extract_colours(tmp_url, 3))
@@ -94,7 +94,7 @@ png("example_simpsons.png", width = 1000, height = 1250, res = 150)
 par(mfrow = c(5,4))
 
 for (n_sim in 1:length(lst_sim)) {
-  tmp_url <- unlist(unlist(lst_sim[n_sim]))
+  tmp_url <- unlist(lst_sim[n_sim])
   if (n_sim %% 2 != 0) display(readImage(tmp_url), method = "raster")
   set.seed(1234)
   pie(rep(1, 3), col = extract_colours(tmp_url, 3))
