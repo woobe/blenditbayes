@@ -58,3 +58,12 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 <center>
 <img src="http://i.imgur.com/YwCy6lZ.png" alt="Tarantino" width="700">
 </center>
+
+---------------------------
+
+## rCharts Parallel Coordinates ([06/2014](http://blenditbayes.blogspot.co.uk/2014/06/rcharts-parcoords-x-simpsons-x-blocks.html))
+
+<center>
+<img src="http://3.bp.blogspot.com/-qEQ3BLfa9Jg/U5HI1Z03tTI/AAAAAAAAAhs/hlE5D8tFFYs/s1600/blog_parcoords_003.png" alt="parcoords" width="700">
+</center>
+
