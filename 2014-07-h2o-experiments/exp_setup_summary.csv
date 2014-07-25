@@ -1,0 +1,6 @@
+Model,Dataset,Samples_Training,Samples_Test,Features,Classes,Hidden_Layers,Nodes,Model_Schematic,Max_Epochs,Regularization,Dropout_Inputs,Dropout_Nodes,H2O_Cluster,Repeated_Runs
+1A,Breast_Cancer,420,279,10,2,3,50-50-50,10-50-50-50-2,100,No,0%,0%,1GB,50
+1B,Breast_Cancer,420,279,10,2,3,50-50-50,10-50-50-50-2,100,Yes,0%,50%,1GB,50
+1C,Breast_Cancer,420,279,10,2,3,50-50-50,10-50-50-50-2,100,Yes,10%,50%,1GB,50
+1D,Breast_Cancer,420,279,10,2,3,50-50-50,10-50-50-50-2,100,Yes,20%,50%,1GB,50
+2,MNIST,60000,10000,784,10,3,400-200-100,784-400-200-100-10,100,No,0%,0%,2GB,1
