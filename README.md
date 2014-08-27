@@ -74,3 +74,11 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 <center>
 <img src="http://4.bp.blogspot.com/-zDPvlUWvGFQ/U9IkPZkwPHI/AAAAAAAAAkM/MUu803W26T4/s1600/exp_1_summary_caption.png" alt="deeplearn" width="700">
 </center>
+
+---------------------------
+
+## RUGSMAPS - Shiny App with Bootstrap ([08/2014](http://bit.ly/1vMQaA1))
+
+<center>
+<img src="https://raw.githubusercontent.com/woobe/rugsmaps/master/image/rugsmap_screenshot_01.png" alt="rugsmaps" width="700">
+</center>
