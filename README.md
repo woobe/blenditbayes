@@ -82,3 +82,16 @@ This is the repository for the code used in my blog "[Blend it like a Bayesian!]
 <center>
 <img src="https://raw.githubusercontent.com/woobe/rugsmaps/master/image/rugsmap_screenshot_01.png" alt="rugsmaps" width="700">
 </center>
+
+---------------------------
+
+## Using R, H2O and Domino for Practical and Scalable Analysis ([09/2014](T.B.C.))
+
+To appear on Domino's blog ... 
+
+<center>
+
+<img src="http://i.imgur.com/S3x3d2O.png" alt="kaggle_topspot" style="width:700px">
+
+</center>
+
